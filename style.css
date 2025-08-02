@@ -1,0 +1,672 @@
+/* --- General Setup & Retro Arcade Theme --- */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    --bg-color: #0d0d21;
+    --surface-color: #1a1a3a;
+    --primary-color: #ff00ff; /* Magenta */
+    --highlight-color: #00ffff; /* Cyan */
+    --text-color: #f0f0f0;
+    --border-color: #4a4a7f;
+    --board-light: #2a2a4a;
+    --board-dark: #1a1a3a;
+
+    /* Ludo Colors */
+    --ludo-red: #ff4136;
+    --ludo-green: #2ecc40;
+    --ludo-yellow: #ffdc00;
+    --ludo-blue: #0074d9;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    image-rendering: pixelated;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Landing & Header --- */
+#landing-header {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transition: opacity 0.5s ease;
+    z-index: 100;
+}
+
+#main-title {
+    font-size: clamp(2.5rem, 10vw, 5rem);
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 3px 3px 0 var(--highlight-color);
+    transition: all 0.5s ease;
+    line-height: 1.2;
+}
+
+#sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--surface-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    border-bottom: 3px solid var(--border-color);
+    z-index: 1000;
+    transform: translateY(-100%);
+    transition: transform 0.5s ease;
+}
+
+body.scrolled #sticky-header {
+    transform: translateY(0);
+}
+
+body.scrolled #landing-header {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#header-title {
+    font-size: 1.1rem;
+    font-weight: normal;
+    color: var(--primary-color);
+}
+
+.header-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.header-icons svg {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+/* --- Scroll Prompt --- */
+#scroll-prompt {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--highlight-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
+    animation: bounce 2s infinite ease-in-out;
+    cursor: pointer;
+}
+
+body.scrolled #scroll-prompt {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-15px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+/* --- Main Content --- */
+#main-content {
+    padding: 100vh 2rem 2rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.game-card {
+    background-color: var(--surface-color);
+    border: 3px solid var(--border-color);
+    padding: 2rem;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px var(--border-color);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.2s ease;
+}
+
+body.scrolled .game-card {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.scrolled .game-card:nth-child(1) { transition-delay: 0.1s; }
+body.scrolled .game-card:nth-child(2) { transition-delay: 0.2s; }
+body.scrolled .game-card:nth-child(3) { transition-delay: 0.3s; }
+body.scrolled .game-card:nth-child(4) { transition-delay: 0.4s; }
+body.scrolled .game-card:nth-child(5) { transition-delay: 0.5s; }
+body.scrolled .game-card:nth-child(6) { transition-delay: 0.6s; }
+
+.game-card:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 10px 10px 0px var(--primary-color);
+}
+
+.game-card-banner {
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--board-dark);
+    border-bottom: 3px solid var(--border-color);
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: -2rem -2rem 0 -2rem;
+    margin-bottom: 2rem;
+}
+.game-card-banner svg {
+    width: 80px;
+    height: 80px;
+}
+.game-card-info {
+    padding: 1rem 0 0 0;
+    text-align: center;
+}
+.game-card-info h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: var(--highlight-color);
+}
+.game-card-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+/* --- Game Containers --- */
+.game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 2000;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.game-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 3px solid var(--border-color);
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 4px 4px 0px var(--border-color);
+}
+
+.game-button:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--border-color);
+}
+
+.game-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: var(--border-color);
+    transform: none;
+    box-shadow: 4px 4px 0px var(--border-color);
+}
+
+.action-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: clamp(320px, 90vw, 720px);
+    margin-top: 1.5rem;
+}
+
+.setup-section {
+    margin-bottom: 2.5rem;
+}
+.setup-section h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    text-align: center;
+}
+.selection-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+.selection-buttons .game-button.selected {
+    background-color: var(--highlight-color);
+    color: var(--bg-color);
+    box-shadow: 6px 6px 0px var(--primary-color);
+    transform: translate(-4px, -4px);
+}
+
+/* --- Game-Specific Areas --- */
+#chess-game-area, #ludo-game-area, #tictactoe-game-area, #sudoku-game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.board-wrapper {
+    display: grid;
+    grid-template-areas: "ranks board" ". files";
+    grid-template-columns: 30px 1fr;
+    grid-template-rows: 1fr 30px;
+    align-items: center;
+    justify-items: center;
+    width: clamp(320px, 90vw, 600px);
+    margin: 0 auto;
+}
+
+.rank-labels { 
+    grid-area: ranks; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    font-size: clamp(0.7rem, 2.5vw, 1rem);
+    opacity: 0.6;
+}
+
+.file-labels { 
+    grid-area: files; 
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    font-size: clamp(0.7rem, 2.5vw, 1rem);
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+#chess-board {
+    grid-area: board;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 5px solid var(--border-color);
+}
+
+.square {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.square .piece {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(28px, 8vw, 48px);
+    line-height: 1;
+    -webkit-text-stroke: 1px var(--bg-color);
+    pointer-events: none;
+}
+
+.square .piece.white { color: var(--highlight-color); }
+.square .piece.black { color: var(--primary-color); }
+.square.light { background-color: var(--board-light); }
+.square.dark { background-color: var(--board-dark); }
+.square.selected { box-shadow: inset 0 0 0 4px var(--primary-color); }
+
+.square.legal-move::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    background: var(--text-color);
+    opacity: 0.5;
+}
+
+#game-status {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--surface-color);
+    border: 3px solid var(--border-color);
+    width: clamp(320px, 90vw, 600px);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    color: white;
+    box-sizing: border-box;
+}
+#game-status-main { padding-bottom: 0.5rem; }
+#game-status #turn-info { font-weight: bold; font-size: 1rem; color: var(--highlight-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;}
+#game-status #move-info,
+#game-status #rules-info { font-size: 0.7rem; margin-top: 0.5rem; opacity: 0.8; line-height: 1.6; }
+#taunt-container {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    min-height: 30px;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* --- Ludo Specific --- */
+#ludo-board-container {
+    position: relative;
+    width: clamp(320px, 90vw, 500px);
+    aspect-ratio: 1 / 1;
+}
+#ludo-board {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    width: 100%;
+    height: 100%;
+    border: 5px solid var(--border-color);
+    background-color: var(--board-dark);
+}
+.ludo-cell {
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+}
+.ludo-path { background-color: var(--board-light); }
+.ludo-yard { position: absolute; width: 40%; height: 40%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; place-items: center; padding: 10%; box-sizing: border-box;}
+.ludo-yard.red { top: 0; left: 0; background-color: var(--ludo-red); }
+.ludo-yard.green { top: 0; right: 0; background-color: var(--ludo-green); }
+.ludo-yard.yellow { bottom: 0; right: 0; background-color: var(--ludo-yellow); }
+.ludo-yard.blue { bottom: 0; left: 0; background-color: var(--ludo-blue); }
+
+.ludo-token {
+    position: absolute;
+    width: 5.5%; height: 5.5%;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 2px 2px 0px black;
+    transition: all 0.3s ease;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+}
+.ludo-token.movable {
+    cursor: pointer;
+    animation: ludo-pulse 1.5s infinite;
+}
+@keyframes ludo-pulse {
+    50% { transform: scale(1.2); box-shadow: 0 0 10px var(--highlight-color); }
+}
+
+#ludo-dice-area {
+    width: 100px; height: 100px;
+    background: var(--surface-color);
+    border: 3px solid var(--border-color);
+    color: var(--highlight-color);
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 1rem 0;
+    user-select: none;
+}
+#ludo-dice-area.rolling { animation: shake 0.5s; }
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+
+/* --- TicTacToe Specific --- */
+#tictactoe-board {
+    display: grid;
+    border: 5px solid var(--border-color);
+    width: clamp(300px, 80vw, 450px);
+    aspect-ratio: 1 / 1;
+    transition: all 0.5s ease;
+}
+.tictactoe-cell {
+    background-color: var(--board-dark);
+    border: 2px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(2rem, 15vw, 4rem);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.tictactoe-cell:hover {
+    background-color: var(--board-light);
+}
+.tictactoe-cell.X { color: var(--primary-color); }
+.tictactoe-cell.O { color: var(--highlight-color); }
+.tictactoe-cell.win { background-color: var(--highlight-color); color: var(--bg-color); }
+
+
+/* --- Sudoku Specific --- */
+#sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    width: clamp(320px, 90vw, 500px);
+    aspect-ratio: 1 / 1;
+    border: 5px solid var(--border-color);
+}
+.sudoku-cell {
+    background-color: var(--board-dark);
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1rem, 5vw, 1.8rem);
+}
+.sudoku-cell input {
+    width: 100%; height: 100%;
+    background: transparent;
+    border: none;
+    color: var(--highlight-color);
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    font-size: inherit;
+    padding: 0;
+}
+.sudoku-cell input:focus { outline: 2px solid var(--primary-color); }
+.sudoku-cell.given { color: var(--text-color); }
+.sudoku-cell.lie input { color: var(--ludo-red) !important; font-style: italic; }
+.sudoku-cell:nth-child(3n) { border-right: 3px solid var(--border-color); }
+.sudoku-cell:nth-child(9n) { border-right: none; }
+
+/* Major grid lines for Sudoku */
+.sudoku-cell[data-row="2"], .sudoku-cell[data-row="5"] {
+     border-bottom: 3px solid var(--border-color);
+}
+.sudoku-cell[data-col="2"], .sudoku-cell[data-col="5"] {
+     border-right: 3px solid var(--border-color);
+}
+.sudoku-cell.error {
+    background-color: #552222;
+}
+
+/* --- Settings Modal --- */
+#settings-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 3000;
+}
+#settings-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--surface-color);
+    border: 3px solid var(--border-color);
+    box-shadow: 8px 8px 0 var(--border-color);
+    width: clamp(300px, 90vw, 500px);
+    padding: 2rem;
+    box-sizing: border-box;
+    z-index: 3001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#settings-modal h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 0 var(--highlight-color);
+    margin-top: 0;
+    text-align: center;
+}
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    width: 100%;
+}
+.setting-item label {
+    text-align: left;
+}
+.setting-item span {
+    color: var(--highlight-color);
+}
+.slider-container {
+    width: 60%;
+}
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 3px solid var(--surface-color);
+    box-shadow: 2px 2px 0 #000;
+}
+input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 3px solid var(--surface-color);
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: .4s;
+}
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+input:checked + .toggle-slider {
+    background-color: var(--highlight-color);
+}
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+.policy-link {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+}
+.policy-link:hover {
+    color: var(--primary-color);
+}
